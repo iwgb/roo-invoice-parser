@@ -38,9 +38,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "watch": "npm run build -- -w",
-    "clean": "rimraf dist",
-    "prebuild": "npm run clean && npm run lint",
-    "lint": "eslint . --ext .ts --ignore-path .gitignore"
+    "prebuild": "rimraf dist",
+    "lint": "eslint . --ext .ts --ignore-path .gitignore",
+    "postinstall": "npm run build"
   },
   "bugs": {
     "url": "https://github.com/iwgb/roo-invoice-parser/issues"

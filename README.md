@@ -63,11 +63,11 @@ console.log(invoice);
 ]
 ```
 
-| Parameter  | Default   | Description                                                                                                                                |
-|------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------|
-| `pdfData`  | Required  | The PDF data, as a raw string or [TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) |
-| `timezone` | `'UTC'`   | The timezone that the work was performed in. The parser will interpret timestamps on the PDF as being in this timezone.                    |
-| `locale`   | `'en-GB'` | The market locale of the invoice. The parser only supports certain market locales - see below.                                             |
+| Parameter  | Default   | Description                                                                                                                                                                                                |
+|------------|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `pdfData`  | Required  | The PDF data, as a raw string or [TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray)                                                                 |
+| `timezone` | `'UTC'`   | The [identifier](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for the timezone that the work was performed in. The parser will interpret timestamps on the PDF as being in this timezone. |
+| `locale`   | `'en-GB'` | The market locale of the invoice. The parser only supports certain market locales - see below.                                                                                                             |
 
 ## CLI
 ```
