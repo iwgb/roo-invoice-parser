@@ -4,8 +4,8 @@ import { getPdfText, PdfData } from './utils/pdf';
 import markets, { Markets } from './market/markets';
 
 export interface Shift {
-  start: Moment,
-  end: Moment,
+  start: string,
+  end: string,
   orders: number,
   pay: number,
 }
@@ -16,8 +16,8 @@ export interface Adjustment {
 }
 
 export interface Invoice {
-  start: Moment | null,
-  end: Moment | null,
+  start: string,
+  end: string,
   shifts: Shift[],
   adjustments: Adjustment[],
   error: string,
@@ -32,14 +32,7 @@ export interface InvoiceComponentGetterProps {
 const hashInvoice = (
   name: string,
   shifts: Shift[],
-): string => hash({
-  name,
-  shifts: shifts.map((shift) => ({
-    ...shift,
-    start: shift.start.toISOString(),
-    end: shift.end.toISOString(),
-  })),
-});
+): string => hash({ name, shifts });
 
 export const parseInvoice = async (
   data: PdfData,
@@ -51,13 +44,7 @@ export const parseInvoice = async (
 
   let shifts: Shift[] = [];
   let adjustments: Adjustment[] = [];
-  let period: {
-    start: Moment | null,
-    end: Moment | null,
-  } = {
-    start: null,
-    end: null,
-  };
+  let period = { start: '', end: '' };
   let name = '';
   let error = '';
 

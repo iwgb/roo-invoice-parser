@@ -48,8 +48,8 @@ const getShifts = ({ text, timezone }: InvoiceComponentGetterProps) => {
     }
 
     return {
-      start,
-      end,
+      start: start.toISOString(true),
+      end: end.toISOString(true),
       orders: Number.parseInt(orders, 10),
       pay: Number.parseFloat(total.trim().slice(1)),
     };
@@ -63,8 +63,8 @@ const getPeriod = ({ text, timezone }: InvoiceComponentGetterProps) => {
     .split(INVOICE_PERIOD_DATE_SEPARATOR)
     .map((date) => moment.tz(date.trim(), INVOICE_DATE_FORMAT, timezone));
   return {
-    start,
-    end: end.endOf('day'),
+    start: start.toISOString(true),
+    end: end.endOf('day').toISOString(true),
   };
 };
 
