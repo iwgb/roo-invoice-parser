@@ -70,13 +70,14 @@ console.log(invoice);
 
 ## CLI
 ```
-rooparse -p /path/to/pdf -t UTC -l en-GB
+rooparse -p /path/to/pdf -t Europe/London -l en-GB
 ```
-| Flag            | Default   | Description                                                                                                             |
-|-----------------|-----------|-------------------------------------------------------------------------------------------------------------------------|
-| `-p --path`     | Required  | Path to an invoice PDF, or a directory of invoice PDFs                                                                  |
-| `-t --timezone` | `'UTC'`   | The timezone that the work was performed in. The parser will interpret timestamps on the PDF as being in this timezone. |
-| `-l --locale`   | `'en-GB'` | The market locale of the invoice. The parser only supports certain market locales - see below.                          |
+| Flag            | Default   | Description                                                                                                                                                                                                |
+|-----------------|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `-p --path`     | Required  | Path to an invoice PDF, or a directory of invoice PDFs                                                                                                                                                     |
+| `-t --timezone` | `'UTC'`   | The [identifier](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for the timezone that the work was performed in. The parser will interpret timestamps on the PDF as being in this timezone. |
+| `-l --locale`   | `'en-GB'` | The market locale of the invoice. The parser only supports certain market locales - see below.                                                                                                             |
+| `-o --output`   |           | If given, writes to the specified file (otherwise, to stdout).                                                                                                                                             |
 
 ## Markets
 Currently supported markets:
@@ -85,4 +86,8 @@ Currently supported markets:
 We're always expanding the markets the parser works in. If you'd like to add support for a new market, raise a PR and we'll get in touch so you can securely provide us with your test data.
 
 ## Licensing
-You're free to use this software for your own non-commercial purposes, as a member of the rider community or otherwise. For more details, see the license in LICENSE.
+You're free to use this software for your own non-commercial purposes, as a member of the rider community or otherwise. If you share the work, you must do so in the same manner, give appropriate credit and indicate your changes (if any). For more details, see the license in LICENSE.
+
+>This summary is not a license and has no legal value. You should carefully review all of the terms and conditions of the actual license before using the licensed material.
+
+If this doesn't suit your requirements, get in touch with us.

@@ -8,6 +8,7 @@
   "license": "see license in LICENSE",
   "homepage": "https://github.com/iwgb/roo-invoice-parser#readme",
   "dependencies": {
+    "cli-progress": "^3.9.0",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.32",
@@ -16,6 +17,7 @@
     "yargs": "^17.0.1"
   },
   "devDependencies": {
+    "@types/cli-progress": "^3.9.2",
     "@types/lodash": "^4.14.171",
     "@types/node": "^16.3.1",
     "@types/object-hash": "^2.1.1",

@@ -1,5 +1,5 @@
-import { Moment } from 'moment';
 import hash from 'object-hash';
+import { SingleBar } from 'cli-progress';
 import { getPdfText, PdfData } from './utils/pdf';
 import markets, { Markets } from './market/markets';
 
@@ -45,6 +45,7 @@ export const parseInvoice = async (
   data: PdfData,
   timezone: string,
   locale: keyof Markets,
+  progress: SingleBar | null = null,
 ): Promise<Invoice> => {
   const text = await getPdfText(data);
 
@@ -78,6 +79,10 @@ export const parseInvoice = async (
     adjustments = parsedAdjustments;
   } catch (e) {
     error = `${e.name}: ${e.message}`;
+  }
+
+  if (progress) {
+    progress.increment();
   }
 
   return {
