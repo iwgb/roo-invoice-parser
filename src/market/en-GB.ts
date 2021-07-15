@@ -1,8 +1,8 @@
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 import { chunk } from 'lodash';
 import { getDateTime } from '../utils/datetime';
 import { INVOICE_DATE_FORMAT } from '../constants/invoice';
-import { InvoiceComponentGetterProps } from '../parse';
+import { InvoiceComponentGetterProps } from '../types';
 
 const HEADER_END_FLAG = 'Total';
 const SUMMARY_START_FLAG = 'Summary';
@@ -14,7 +14,7 @@ const INVOICE_PERIOD_LABEL_SEPARATOR = ':';
 const INVOICE_PERIOD_DATE_SEPARATOR = '-';
 const INVOICE_ADJUSTMENT_EXCLUDED_LABELS = ['Drop Fees', 'Total'];
 
-const getShifts = ({ text, timezone }: InvoiceComponentGetterProps) => {
+const getShifts = ({ text, zone }: InvoiceComponentGetterProps) => {
   const rawShifts = text
     .slice(
       text.indexOf(HEADER_END_FLAG) + 1,
@@ -40,31 +40,31 @@ const getShifts = ({ text, timezone }: InvoiceComponentGetterProps) => {
     _1, date, startTime, endTime, _2, ordersAndTotal,
   ]) => {
     const [orders, total] = ordersAndTotal.split(ORDERS_TOTAL_SEPARATOR);
-    const start = getDateTime(date, startTime, timezone);
-    let end = getDateTime(date, endTime, timezone);
+    const start = getDateTime(date, startTime, zone);
+    let end = getDateTime(date, endTime, zone);
 
-    if (end.isBefore(start)) {
-      end = end.add(1, 'day');
+    if (end < start) {
+      end = end.plus({ days: 1 });
     }
 
     return {
-      start: start.toISOString(true),
-      end: end.toISOString(true),
+      start,
+      end,
       orders: Number.parseInt(orders, 10),
       pay: Number.parseFloat(total.trim().slice(1)),
     };
   });
 };
 
-const getPeriod = ({ text, timezone }: InvoiceComponentGetterProps) => {
+const getPeriod = ({ text, zone }: InvoiceComponentGetterProps) => {
   const [start, end] = (text
     .find((line) => line.includes(INVOICE_PERIOD_FLAG)) || '')
     .split(INVOICE_PERIOD_LABEL_SEPARATOR)[1]
     .split(INVOICE_PERIOD_DATE_SEPARATOR)
-    .map((date) => moment.tz(date.trim(), INVOICE_DATE_FORMAT, timezone));
+    .map((date) => DateTime.fromFormat(date.trim(), INVOICE_DATE_FORMAT, { zone }));
   return {
-    start: start.toISOString(true),
-    end: end.endOf('day').toISOString(true),
+    start,
+    end: end.endOf('day'),
   };
 };
 

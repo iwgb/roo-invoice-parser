@@ -1,9 +1,11 @@
 import enGb from './en-GB';
-import { Adjustment, InvoiceComponentGetterProps, Shift } from '../parse';
+import {
+  Adjustment, InvoiceComponentGetterProps, Period, Shift,
+} from '../types';
 
 interface InvoiceParser {
   getName: (props: InvoiceComponentGetterProps) => string,
-  getPeriod: (props: InvoiceComponentGetterProps) => { start: string, end: string },
+  getPeriod: (props: InvoiceComponentGetterProps) => Period,
   getShifts: (props: InvoiceComponentGetterProps) => Shift[],
   getAdjustments: (props: InvoiceComponentGetterProps) => Adjustment[],
 }

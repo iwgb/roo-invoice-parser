@@ -1,10 +1,45 @@
-import { Moment } from 'moment';
-import moment from 'moment-timezone';
+import { DateTime, Interval } from 'luxon';
 import { INVOICE_DATE_FORMAT, INVOICE_TIME_FORMAT } from '../constants/invoice';
+import { round } from './math';
 
-// eslint-disable-next-line import/prefer-default-export
-export const getDateTime = (date: string, time: string, location: string): Moment => moment.tz(
-  `${date} ${time}`,
-  `${INVOICE_DATE_FORMAT} ${INVOICE_TIME_FORMAT}`,
-  location,
+export const getDateTime = (date: string, time: string, zone: string): DateTime => DateTime
+  .fromFormat(
+    `${date} ${time}`,
+    `${INVOICE_DATE_FORMAT} ${INVOICE_TIME_FORMAT}`,
+    { zone },
+  );
+
+export const dayArrayFromInterval = (interval: Interval) => {
+  let day = interval.start.startOf('day');
+  let dayArray: DateTime[] = [];
+  while (day < interval.end) {
+    dayArray = [...dayArray, day];
+    day = day.plus({ days: 1 });
+  }
+  return dayArray;
+};
+
+const MONDAY = 1;
+
+export const mondaysInInterval = (interval: Interval) => dayArrayFromInterval(interval)
+  .reduce((mondays, day) => {
+    if (
+      mondays.length === 0
+      && day.weekday !== MONDAY
+    ) {
+      return [];
+    }
+    if (day.weekday === MONDAY) {
+      return [
+        ...mondays,
+        day,
+      ];
+    }
+    return mondays;
+  }, [] as DateTime[]);
+
+export const getShiftHours = (start: DateTime, end: DateTime) => round(
+  Interval
+    .fromDateTimes(start, end)
+    .length('hours'),
 );

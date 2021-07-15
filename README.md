@@ -20,6 +20,8 @@ npm i @g @iwgb/roo-invoice-parser
 
 ## Usage
 
+### Parsing
+Returns data as parsed from the invoice. The invoice hash is calculated from the name on the invoice and the shifts billed.
 ```js
 import { parseInvoice } from 'roo-invoice-parser';
 
@@ -31,20 +33,14 @@ console.log(invoice);
 ```json
 [
     {
-        "start": "2021-07-13T00:00:00.000Z",
-        "end": "2021-07-15T00:00:00.000Z",
+        "start": "2021-07-13T00:00:00.000+01:00",
+        "end": "2021-07-14T23:59:59.999+01:00",
         "shifts": [
             {
-                "start": "2021-07-13T19:00:00.000Z",
-                "end": "2021-07-13T21:09:00.000Z",
+                "start": "2021-07-13T19:00:00.000+01:00",
+                "end": "2021-07-13T21:09:00.000+01:00",
                 "orders": 5,
                 "pay": 22.43
-            },
-            {
-                "start": "2021-07-14T17:59:00.000Z",
-                "end": "2021-07-14T21:05:00.000Z",
-                "orders": 4,
-                "pay": 20.68
             }
         ],
         "adjustments": [
@@ -69,6 +65,51 @@ console.log(invoice);
 | `timezone` | `'UTC'`   | The [identifier](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for the timezone that the work was performed in. The parser will interpret timestamps on the PDF as being in this timezone. |
 | `locale`   | `'en-GB'` | The market locale of the invoice. The parser only supports certain market locales - see below.                                                                                                             |
 
+### Processing
+Group invoice data by week and month.
+
+```js
+import { processInvoices } from 'roo-invoice-parser';
+
+const data = await processInvoices(invoices);
+
+console.log(data);
+```
+
+```json
+[
+  {
+    "start": "2020-07-01T00:00:00.000+01:00",
+    "weeks": [
+      {
+        "monday": "2020-07-19T00:00:00.000+01:00",
+        "shifts": [
+          {
+            "start": "2020-07-20T15:52:00.000+01:00",
+            "end": "2020-07-20T19:02:00.000+01:00",
+            "orders": 7,
+            "pay": 33.21,
+            "hours": 3.17
+          }
+        ],
+        "adjustments": [
+          {
+            "label": "Tips",
+            "amount": 4
+          }
+        ],
+        "totals": {
+          "hours": 3.17,
+          "orders": 7,
+          "pay": 33.21,
+          "adjustments": 4
+        }
+      }
+    ]
+  }
+]
+```
+
 ## CLI
 ```
 rooparse -p /path/to/pdf -t Europe/London -l en-GB
@@ -79,6 +120,7 @@ rooparse -p /path/to/pdf -t Europe/London -l en-GB
 | `-t --timezone` | `'UTC'`   | The [identifier](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for the timezone that the work was performed in. The parser will interpret timestamps on the PDF as being in this timezone. |
 | `-l --locale`   | `'en-GB'` | The market locale of the invoice. The parser only supports certain market locales - see below.                                                                                                             |
 | `-o --output`   |           | If given, writes to the specified file (otherwise, to stdout).                                                                                                                                             |
+| `-w --weeks`    |           | If given, formats the output in weeks (see *processing* above)                                                                                                                                             |
 
 ## Markets
 Currently supported markets:
