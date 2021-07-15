@@ -4,8 +4,8 @@ import yargs from 'yargs';
 import fs from 'fs/promises';
 import cliProgress from 'cli-progress';
 import markets, { Markets } from './market/markets';
-import { parseInvoice } from './parse';
-import { processInvoices } from './process';
+import parseInvoice from './parse';
+import processInvoices from './process';
 import {
   invoiceSerializer,
   monthSerializer,
