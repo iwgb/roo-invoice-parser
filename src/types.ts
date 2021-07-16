@@ -5,6 +5,11 @@ export interface Period {
   end: DateTime,
 }
 
+export interface SerializedPeriod {
+  start: string,
+  end: string,
+}
+
 export interface BaseShift {
   orders: number,
   pay: number,
@@ -12,6 +17,8 @@ export interface BaseShift {
 }
 
 export interface Shift extends BaseShift, Period {}
+
+export interface SerializedShift extends BaseShift, SerializedPeriod {}
 
 export interface Adjustment {
   label: string,
@@ -26,6 +33,10 @@ export interface BaseInvoice {
 
 export interface Invoice extends Period, BaseInvoice {
   shifts: Shift[],
+}
+
+export interface SerializedInvoice extends SerializedPeriod, BaseInvoice {
+  shifts: SerializedShift[],
 }
 
 export interface InvoiceComponentGetterProps {

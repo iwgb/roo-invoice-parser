@@ -68,6 +68,8 @@ console.log(invoice);
 ### Processing
 Group invoice data by week and month.
 
+Provide invoice data in the format above, as returned by the parser. Timestamps should be ISO strings, or instances of the Luxon DateTime.
+
 ```js
 import { processInvoices } from 'roo-invoice-parser';
 

@@ -6,10 +6,6 @@ import cliProgress from 'cli-progress';
 import markets, { Markets } from './market/markets';
 import parseInvoice from './parse';
 import processInvoices from './process';
-import {
-  invoiceSerializer,
-  monthSerializer,
-} from './utils/serializable';
 
 const localeChoices = Object.keys(markets) as Array<keyof Markets>;
 
@@ -78,8 +74,8 @@ const progress = new cliProgress.Bar({ clearOnComplete: true }, cliProgress.Pres
   )));
 
   const result = weeks
-    ? monthSerializer.toSerializable(await processInvoices(invoices))
-    : invoiceSerializer.toSerializable(invoices);
+    ? await processInvoices(invoices)
+    : invoices;
 
   if (output) {
     progress.stop();
