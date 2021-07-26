@@ -54,7 +54,7 @@ const parseInvoice = async (
       ...shift,
       hours: getShiftHours(shift.start, shift.end),
     })), (shift) => shift.start.toMillis());
-    adjustments = sortBy(parsedAdjustments, ['label', 'amount']);
+    adjustments = sortBy(parsedAdjustments, ['label']);
   } catch (e) {
     error = `${e.name}: ${e.message}`;
   }
@@ -64,6 +64,7 @@ const parseInvoice = async (
   }
 
   return {
+    name,
     ...period,
     shifts,
     adjustments,

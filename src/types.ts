@@ -26,6 +26,7 @@ export interface Adjustment {
 }
 
 export interface BaseInvoice {
+  name: string,
   adjustments: Adjustment[],
   error: string,
   hash: string,

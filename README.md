@@ -33,6 +33,7 @@ console.log(invoice);
 ```json
 [
     {
+        "name": "Sample Text",
         "start": "2021-07-13T00:00:00.000+01:00",
         "end": "2021-07-14T23:59:59.999+01:00",
         "shifts": [
@@ -58,6 +59,8 @@ console.log(invoice);
     }
 ]
 ```
+
+Timestamps are returned as instances of the Luxon DateTime (the package is a peer dependency).
 
 | Parameter  | Default   | Description                                                                                                                                                                                                |
 |------------|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
