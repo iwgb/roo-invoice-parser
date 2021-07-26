@@ -1,6 +1,6 @@
 {
   "name": "@iwgb/roo-invoice-parser",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iwgb/roo-invoice-parser.git"
