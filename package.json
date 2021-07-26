@@ -11,6 +11,7 @@
     "cli-progress": "^3.9.0",
     "lodash": "^4.17.20",
     "pdfjs-dist": "^2.5.207",
+    "sha.js": "^2.4.11",
     "yargs": "^17.0.1"
   },
   "devDependencies": {
@@ -20,6 +21,7 @@
     "@types/node": "^16.3.1",
     "@types/object-hash": "^2.1.1",
     "@types/pdfjs-dist": "^2.7.4",
+    "@types/sha.js": "^2.4.0",
     "@types/yargs": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^4.28.3",
     "@typescript-eslint/parser": "^4.28.3",

@@ -1,22 +1,23 @@
-import hash from 'object-hash';
+import { sha256 as Sha256 } from 'sha.js';
 import { SingleBar } from 'cli-progress';
 import { DateTime } from 'luxon';
+import sortBy from 'lodash/sortBy';
 import { getPdfText, PdfData } from './utils/pdf';
-import markets, { Markets } from './market/markets';
+import markets, { InvoiceParser, Markets } from './market/markets';
 import { Adjustment, Invoice, Shift } from './types';
 import { getShiftHours } from './utils/datetime';
 
 const hashInvoice = (
   name: string,
   shifts: Shift[],
-): string => hash({
-  name,
-  shifts: shifts.map((shift) => ({
-    ...shift,
-    start: shift.start.toISO(),
-    end: shift.end.toISO(),
-  })),
-});
+  adjustments: Adjustment[],
+): string => new Sha256()
+  .update(JSON.stringify({
+    name,
+    shifts,
+    adjustments,
+  }))
+  .digest('hex');
 
 const parseInvoice = async (
   data: PdfData,
@@ -35,25 +36,25 @@ const parseInvoice = async (
   let name = '';
   let error = '';
 
-  const parser = markets[locale];
+  const parser = markets[locale] as InvoiceParser;
 
   try {
     const args = { text, zone };
     const [
-      parsedName, parsedPeriod, parsedAdjustments, parsedShifts,
+      parsedName, parsedPeriod, parsedShifts, parsedAdjustments,
     ] = await Promise.all([
       parser.getName(args),
       parser.getPeriod(args),
-      parser.getAdjustments(args),
       parser.getShifts(args),
+      parser.getAdjustments(args),
     ]);
     name = parsedName;
     period = parsedPeriod;
-    adjustments = parsedAdjustments;
-    shifts = parsedShifts.map((shift) => ({
+    shifts = sortBy(parsedShifts.map<Shift>((shift) => ({
       ...shift,
       hours: getShiftHours(shift.start, shift.end),
-    }));
+    })), (shift) => shift.start.toMillis());
+    adjustments = sortBy(parsedAdjustments, ['label', 'amount']);
   } catch (e) {
     error = `${e.name}: ${e.message}`;
   }
@@ -67,7 +68,7 @@ const parseInvoice = async (
     shifts,
     adjustments,
     error,
-    hash: hashInvoice(name, shifts),
+    hash: hashInvoice(name, shifts, adjustments),
   };
 };
 

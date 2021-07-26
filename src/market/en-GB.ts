@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { chunk } from 'lodash';
+import chunk from 'lodash/chunk';
 import { getDateTime } from '../utils/datetime';
 import { INVOICE_DATE_FORMAT } from '../constants/invoice';
 import { InvoiceComponentGetterProps } from '../types';

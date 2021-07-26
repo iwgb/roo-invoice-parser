@@ -3,7 +3,7 @@ import {
   Adjustment, InvoiceComponentGetterProps, Period, Shift,
 } from '../types';
 
-interface InvoiceParser {
+export interface InvoiceParser {
   getName: (props: InvoiceComponentGetterProps) => string,
   getPeriod: (props: InvoiceComponentGetterProps) => Period,
   getShifts: (props: InvoiceComponentGetterProps) => Shift[],
