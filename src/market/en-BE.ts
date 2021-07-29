@@ -1,15 +1,13 @@
 import { DateTime } from 'luxon';
-import { INVOICE_DATE_FORMAT } from '../constants/invoice';
 import { InvoiceComponentGetterProps } from '../types';
+import { INVOICE_DATE_FORMAT } from '../constants/invoice';
 import { getDataFromAdjustmentTable, getDataFromShiftTable } from '../utils/parse';
 
+const SUPPLIER_FLAG = 'Supplier:';
+const INVOICE_PERIOD_FLAG = 'Services provided';
+const INVOICE_PERIOD_SEPARATOR = '-';
 const HEADER_END_FLAG = 'Total';
 const SUMMARY_START_FLAG = 'Summary';
-const INVOICE_NAME_FLAG = 'Pay to';
-const INVOICE_NAME_LABEL_SEPARATOR = ':';
-const INVOICE_PERIOD_FLAG = 'Payment for Services Rendered';
-const INVOICE_PERIOD_LABEL_SEPARATOR = ':';
-const INVOICE_PERIOD_DATE_SEPARATOR = '-';
 const INVOICE_ADJUSTMENT_EXCLUDED_LABELS = ['Drop Fees', 'Total'];
 
 const getShifts = ({ text, zone }: InvoiceComponentGetterProps) => getDataFromShiftTable(
@@ -22,8 +20,8 @@ const getShifts = ({ text, zone }: InvoiceComponentGetterProps) => getDataFromSh
 const getPeriod = ({ text, zone }: InvoiceComponentGetterProps) => {
   const [start, end] = (text
     .find((line) => line.includes(INVOICE_PERIOD_FLAG)) || '')
-    .split(INVOICE_PERIOD_LABEL_SEPARATOR)[1]
-    .split(INVOICE_PERIOD_DATE_SEPARATOR)
+    .split(INVOICE_PERIOD_SEPARATOR)
+    .slice(1)
     .map((date) => DateTime.fromFormat(date.trim(), INVOICE_DATE_FORMAT, { zone }));
   return {
     start,
@@ -31,15 +29,15 @@ const getPeriod = ({ text, zone }: InvoiceComponentGetterProps) => {
   };
 };
 
-const getName = ({ text }: InvoiceComponentGetterProps) => (text
-  .find((line) => line.includes(INVOICE_NAME_FLAG)) || '')
-  .split(INVOICE_NAME_LABEL_SEPARATOR)[1]
-  .trim();
+const getName = ({
+  text,
+}: InvoiceComponentGetterProps) => text[text.findIndex((line) => line === SUPPLIER_FLAG) + 1];
 
 const getAdjustments = ({ text }: InvoiceComponentGetterProps) => getDataFromAdjustmentTable(
   text,
   SUMMARY_START_FLAG,
   INVOICE_ADJUSTMENT_EXCLUDED_LABELS,
+  -2,
 );
 
 export default {
