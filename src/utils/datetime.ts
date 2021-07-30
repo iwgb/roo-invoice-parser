@@ -1,12 +1,16 @@
-import { DateTime, Interval } from 'luxon';
+import { DateTime, DateTimeOptions, Interval } from 'luxon';
 import { INVOICE_DATE_FORMAT, INVOICE_TIME_FORMAT } from '../constants/invoice';
 import { round } from './math';
 
-export const getDateTime = (date: string, time: string, zone: string): DateTime => DateTime
+export const getDateTime = (
+  date: string,
+  time: string,
+  opts: DateTimeOptions,
+): DateTime => DateTime
   .fromFormat(
     `${date} ${time}`,
     `${INVOICE_DATE_FORMAT} ${INVOICE_TIME_FORMAT}`,
-    { zone },
+    opts,
   );
 
 export const dayArrayFromInterval = (interval: Interval) => {

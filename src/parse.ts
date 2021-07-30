@@ -39,7 +39,7 @@ const parseInvoice = async (
   const parser = markets[locale] as InvoiceParser;
 
   try {
-    const args = { text, zone };
+    const args = { text, zone, locale };
     const [
       parsedName, parsedPeriod, parsedShifts, parsedAdjustments,
     ] = await Promise.all([
@@ -69,7 +69,7 @@ const parseInvoice = async (
     shifts,
     adjustments,
     error,
-    hash: hashInvoice(name, shifts, adjustments),
+    hash: error === '' ? hashInvoice(name, shifts, adjustments) : '',
   };
 };
 

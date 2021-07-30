@@ -4,13 +4,13 @@ import { InvoiceComponentGetterProps } from '../types';
 import { getDataFromAdjustmentTable, getDataFromShiftTable } from '../utils/parse';
 
 const HEADER_END_FLAG = 'Total';
-const SUMMARY_START_FLAG = 'Summary';
-const INVOICE_NAME_FLAG = 'Pay to';
+const SUMMARY_START_FLAG = 'sume';
+const INVOICE_NAME_FLAG = 'Nom';
 const INVOICE_NAME_LABEL_SEPARATOR = ':';
-const INVOICE_PERIOD_FLAG = 'Payment for Services Rendered';
-const INVOICE_PERIOD_LABEL_SEPARATOR = ':';
-const INVOICE_PERIOD_DATE_SEPARATOR = '-';
-const INVOICE_ADJUSTMENT_EXCLUDED_LABELS = ['Drop Fees', 'Total'];
+const INVOICE_PERIOD_FLAG = 'Prestations du';
+const INVOICE_PERIOD_LABEL_SEPARATOR = 'du';
+const INVOICE_PERIOD_DATE_SEPARATOR = 'au';
+const INVOICE_ADJUSTMENT_EXCLUDED_LABELS = ['Commandes livrées', 'Total TTC'];
 
 const getShifts = ({ text, zone, locale }: InvoiceComponentGetterProps) => getDataFromShiftTable(
   text,
@@ -20,12 +20,12 @@ const getShifts = ({ text, zone, locale }: InvoiceComponentGetterProps) => getDa
   SUMMARY_START_FLAG,
 );
 
-const getPeriod = ({ text, zone }: InvoiceComponentGetterProps) => {
+const getPeriod = ({ text, zone, locale }: InvoiceComponentGetterProps) => {
   const [start, end] = (text
     .find((line) => line.includes(INVOICE_PERIOD_FLAG)) || '')
     .split(INVOICE_PERIOD_LABEL_SEPARATOR)[1]
     .split(INVOICE_PERIOD_DATE_SEPARATOR)
-    .map((date) => DateTime.fromFormat(date.trim(), INVOICE_DATE_FORMAT, { zone }));
+    .map((date) => DateTime.fromFormat(date.trim(), INVOICE_DATE_FORMAT, { zone, locale }));
   return {
     start,
     end: end.endOf('day'),
@@ -41,6 +41,7 @@ const getAdjustments = ({ text }: InvoiceComponentGetterProps) => getDataFromAdj
   text,
   SUMMARY_START_FLAG,
   INVOICE_ADJUSTMENT_EXCLUDED_LABELS,
+  1,
 );
 
 export default {

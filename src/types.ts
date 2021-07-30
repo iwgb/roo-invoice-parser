@@ -43,6 +43,7 @@ export interface SerializedInvoice extends SerializedPeriod, BaseInvoice {
 export interface InvoiceComponentGetterProps {
   text: string[],
   zone: string,
+  locale: string,
 }
 
 export interface Totals {

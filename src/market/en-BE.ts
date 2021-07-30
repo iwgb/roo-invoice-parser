@@ -10,9 +10,10 @@ const HEADER_END_FLAG = 'Total';
 const SUMMARY_START_FLAG = 'Summary';
 const INVOICE_ADJUSTMENT_EXCLUDED_LABELS = ['Drop Fees', 'Total'];
 
-const getShifts = ({ text, zone }: InvoiceComponentGetterProps) => getDataFromShiftTable(
+const getShifts = ({ text, zone, locale }: InvoiceComponentGetterProps) => getDataFromShiftTable(
   text,
   zone,
+  locale,
   HEADER_END_FLAG,
   SUMMARY_START_FLAG,
 );
@@ -37,7 +38,6 @@ const getAdjustments = ({ text }: InvoiceComponentGetterProps) => getDataFromAdj
   text,
   SUMMARY_START_FLAG,
   INVOICE_ADJUSTMENT_EXCLUDED_LABELS,
-  -2,
 );
 
 export default {

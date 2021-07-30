@@ -58,7 +58,7 @@ const progress = new cliProgress.Bar({ clearOnComplete: true }, cliProgress.Pres
           dirent.isFile()
           && dirent.name.split('.').slice(-1)[0].toLowerCase() === 'pdf'
         ))
-        .map(({ name }) => `${path}/${name}`)
+        .map(({ name }) => `${path}${name}`)
     )
     : [path];
 
@@ -66,12 +66,15 @@ const progress = new cliProgress.Bar({ clearOnComplete: true }, cliProgress.Pres
     progress.start(invoicePaths.length, 0);
   }
 
-  const invoices = await Promise.all(invoicePaths.map(async (invoicePath) => parseInvoice(
-    await fs.readFile(invoicePath),
-    timezone,
-    locale,
-    output ? progress : null,
-  )));
+  const invoices = await Promise.all(invoicePaths.map(async (invoicePath) => ({
+    ...await parseInvoice(
+      await fs.readFile(invoicePath),
+      timezone,
+      locale,
+      output ? progress : null,
+    ),
+    file: invoicePath,
+  })));
 
   const result = weeks
     ? await processInvoices(invoices)
