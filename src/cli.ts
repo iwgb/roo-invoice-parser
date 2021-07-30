@@ -27,7 +27,7 @@ const {
       alias: 't',
       type: 'string',
       describe: 'Main timezone (not DST) that the work was performed in',
-      default: 'UTC',
+      default: undefined,
     },
     locale: {
       alias: 'l',

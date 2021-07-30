@@ -1,7 +1,9 @@
-import { DateTime } from 'luxon';
-import { INVOICE_DATE_FORMAT } from '../constants/invoice';
 import { InvoiceComponentGetterProps } from '../types';
-import { getDataFromAdjustmentTable, getDataFromShiftTable } from '../utils/parse';
+import {
+  getDataFromAdjustmentTable,
+  getDataFromShiftTable,
+  getPeriodFromHeader,
+} from '../utils/parse';
 
 const HEADER_END_FLAG = 'Total';
 const SUMMARY_START_FLAG = 'Summary';
@@ -20,17 +22,13 @@ const getShifts = ({ text, zone, locale }: InvoiceComponentGetterProps) => getDa
   SUMMARY_START_FLAG,
 );
 
-const getPeriod = ({ text, zone }: InvoiceComponentGetterProps) => {
-  const [start, end] = (text
-    .find((line) => line.includes(INVOICE_PERIOD_FLAG)) || '')
-    .split(INVOICE_PERIOD_LABEL_SEPARATOR)[1]
-    .split(INVOICE_PERIOD_DATE_SEPARATOR)
-    .map((date) => DateTime.fromFormat(date.trim(), INVOICE_DATE_FORMAT, { zone }));
-  return {
-    start,
-    end: end.endOf('day'),
-  };
-};
+const getPeriod = ({ text, zone }: InvoiceComponentGetterProps) => getPeriodFromHeader(
+  text,
+  INVOICE_PERIOD_FLAG,
+  INVOICE_PERIOD_LABEL_SEPARATOR,
+  INVOICE_PERIOD_DATE_SEPARATOR,
+  { zone },
+);
 
 const getName = ({ text }: InvoiceComponentGetterProps) => (text
   .find((line) => line.includes(INVOICE_NAME_FLAG)) || '')

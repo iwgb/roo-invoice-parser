@@ -22,7 +22,7 @@ const hashInvoice = (
 const parseInvoice = async (
   data: PdfData,
   locale: keyof Markets,
-  timezone: string | null = null,
+  timezone: string | undefined = undefined,
   progress: SingleBar | null = null,
 ): Promise<Invoice> => {
   const text = await getPdfText(data);

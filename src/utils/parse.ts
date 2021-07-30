@@ -1,7 +1,8 @@
 import chunk from 'lodash/chunk';
-import { Info } from 'luxon';
+import { DateTime, DateTimeOptions, Info } from 'luxon';
 import { Adjustment, Shift } from '../types';
 import { getDateTime } from './datetime';
+import { INVOICE_DATE_FORMAT } from '../constants/invoice';
 
 export const getDataFromShiftTable = (
   text: string[],
@@ -74,7 +75,7 @@ export const getDataFromAdjustmentTable = (
   ), 2);
 
   return adjustments
-    .map(([label, amount]) => ({
+    .map(([label, amount = '']) => ({
       label,
       amount: Number.parseFloat(amount.slice(1)),
     }))
@@ -82,4 +83,22 @@ export const getDataFromAdjustmentTable = (
       !excludedLabels.includes(label)
       && !Number.isNaN(amount)
     ));
+};
+
+export const getPeriodFromHeader = (
+  text: string[],
+  lineLabel: string,
+  labelSeparator: string,
+  dateSeparator: string,
+  dateTimeOpts: DateTimeOptions,
+) => {
+  const [start, end] = (text
+    .find((line) => line.includes(lineLabel)) || '')
+    .split(labelSeparator)[1]
+    .split(dateSeparator)
+    .map((date) => DateTime.fromFormat(date.trim(), INVOICE_DATE_FORMAT, dateTimeOpts));
+  return {
+    start,
+    end: end.endOf('day'),
+  };
 };
