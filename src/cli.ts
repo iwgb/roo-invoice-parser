@@ -10,7 +10,11 @@ import processInvoices from './process';
 const localeChoices = Object.keys(markets) as Array<keyof Markets>;
 
 const {
-  path, timezone, locale, output, weeks,
+  path,
+  locale,
+  timezone,
+  output,
+  weeks,
 } = yargs
   .options({
     path: {
@@ -30,7 +34,7 @@ const {
       type: 'string',
       describe: 'Invoice locale',
       choices: localeChoices,
-      default: localeChoices[0],
+      demandOption: true,
     },
     output: {
       alias: 'o',
@@ -69,8 +73,8 @@ const progress = new cliProgress.Bar({ clearOnComplete: true }, cliProgress.Pres
   const invoices = await Promise.all(invoicePaths.map(async (invoicePath) => ({
     ...await parseInvoice(
       await fs.readFile(invoicePath),
+      locale as keyof Markets,
       timezone,
-      locale,
       output ? progress : null,
     ),
     file: invoicePath,

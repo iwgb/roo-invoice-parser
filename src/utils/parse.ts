@@ -18,20 +18,29 @@ export const getDataFromShiftTable = (
       text.indexOf(lineBefore) + 1,
       text.indexOf(lineAfter),
     )
-    .reduce((shifts, shiftLine) => (
-      weekdays.includes(shiftLine.toLowerCase())
-        ? [
+    .reduce((shifts, shiftLine) => {
+      const lastShift = shifts.slice(-1)[0] || [];
+      const isNewRow = weekdays.includes(shiftLine.toLowerCase());
+
+      if (isNewRow) {
+        return [
           ...shifts,
           [shiftLine],
-        ]
-        : [
+        ];
+      }
+
+      if (lastShift.length > 0) {
+        return [
           ...shifts.slice(0, -1),
           [
-            ...shifts.slice(-1)[0],
+            ...lastShift,
             shiftLine,
           ],
-        ]
-    ), [] as string[][]);
+        ];
+      }
+
+      return shifts;
+    }, [] as string[][]);
 
   return rawShifts.map(([
     // eslint-disable-next-line no-unused-vars

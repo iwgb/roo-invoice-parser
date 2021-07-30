@@ -12,14 +12,24 @@ export interface InvoiceParser {
   getAdjustments: (props: InvoiceComponentGetterProps) => Adjustment[],
 }
 
+const UNITED_KINGDOM = 'en-GB';
+const BELGIUM = 'en-BE';
+const FRANCE = 'fr-FR';
+
 export interface Markets {
-  'en-GB': InvoiceParser,
-  'en-BE': InvoiceParser,
-  'fr-FR': InvoiceParser,
+  [UNITED_KINGDOM]: InvoiceParser,
+  [BELGIUM]: InvoiceParser,
+  [FRANCE]: InvoiceParser,
 }
 
+export const defaultTimezones = {
+  [UNITED_KINGDOM]: 'Europe/London',
+  [BELGIUM]: 'Europe/Brussels',
+  [FRANCE]: 'Europe/Paris',
+};
+
 export default {
-  'en-GB': enGb,
-  'en-BE': enBe,
-  'fr-FR': frFr,
+  [UNITED_KINGDOM]: enGb,
+  [BELGIUM]: enBe,
+  [FRANCE]: frFr,
 };

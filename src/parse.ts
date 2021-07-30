@@ -3,7 +3,7 @@ import { SingleBar } from 'cli-progress';
 import { DateTime } from 'luxon';
 import sortBy from 'lodash/sortBy';
 import { getPdfText, PdfData } from './utils/pdf';
-import markets, { InvoiceParser, Markets } from './market/markets';
+import markets, { InvoiceParser, Markets, defaultTimezones } from './market/markets';
 import { Adjustment, Invoice, Shift } from './types';
 import { getShiftHours } from './utils/datetime';
 
@@ -21,11 +21,12 @@ const hashInvoice = (
 
 const parseInvoice = async (
   data: PdfData,
-  zone: string,
   locale: keyof Markets,
+  timezone: string | null = null,
   progress: SingleBar | null = null,
 ): Promise<Invoice> => {
   const text = await getPdfText(data);
+  const zone = timezone || defaultTimezones[locale];
 
   let shifts: Shift[] = [];
   let adjustments: Adjustment[] = [];
@@ -56,7 +57,7 @@ const parseInvoice = async (
     })), (shift) => shift.start.toMillis());
     adjustments = sortBy(parsedAdjustments, ['label']);
   } catch (e) {
-    error = `${e.name}: ${e.message}`;
+    error = e.stack || `${e.name}: ${e.message}`;
   }
 
   if (progress) {
