@@ -4,6 +4,8 @@ import {
   getDataFromAdjustmentTable, getDataFromShiftTable,
 } from '../utils/parse';
 import { INVOICE_DATE_FORMAT } from '../constants/invoice';
+import { InvoiceParser } from './markets';
+import { AUD } from '../constants/currency';
 
 const SUMMARY_START_FLAG = 'Summary';
 const HEADER_END_FLAG = 'Total';
@@ -12,6 +14,7 @@ const INVOICE_PERIOD_DATE_SEPARATOR = '-';
 const INVOICE_ADJUSTMENT_EXCLUDED_LABELS = ['Drop Fees', 'Total'];
 const INVOICE_NAME_FLAG = 'Supplier:';
 const INVOICE_NAME_LABEL_SEPARATOR = ':';
+const COMPANY_NAME = 'Deliveroo Australia Pty Ltd';
 
 const getShifts = ({ text, zone, locale }: InvoiceComponentGetterProps) => getDataFromShiftTable(
   text,
@@ -43,5 +46,10 @@ const getAdjustments = ({ text }: InvoiceComponentGetterProps) => getDataFromAdj
 );
 
 export default {
-  getName, getPeriod, getShifts, getAdjustments,
-};
+  getName,
+  getPeriod,
+  getShifts,
+  getAdjustments,
+  currency: AUD,
+  flag: COMPANY_NAME,
+} as InvoiceParser;

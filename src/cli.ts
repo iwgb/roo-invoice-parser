@@ -32,9 +32,9 @@ const {
     locale: {
       alias: 'l',
       type: 'string',
-      describe: 'Invoice locale',
+      describe: 'Known invoice locale (otherwise, will attempt to detect)',
       choices: localeChoices,
-      demandOption: true,
+      default: undefined,
     },
     output: {
       alias: 'o',
@@ -73,7 +73,7 @@ const progress = new cliProgress.Bar({ clearOnComplete: true }, cliProgress.Pres
   const invoices = await Promise.all(invoicePaths.map(async (invoicePath) => ({
     ...await parseInvoice(
       await fs.readFile(invoicePath),
-      locale as keyof Markets,
+      locale,
       timezone,
       output ? progress : null,
     ),

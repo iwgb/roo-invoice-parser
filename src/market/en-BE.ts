@@ -2,6 +2,8 @@ import { DateTime } from 'luxon';
 import { InvoiceComponentGetterProps } from '../types';
 import { INVOICE_DATE_FORMAT } from '../constants/invoice';
 import { getDataFromAdjustmentTable, getDataFromShiftTable } from '../utils/parse';
+import { InvoiceParser } from './markets';
+import { EUR } from '../constants/currency';
 
 const SUPPLIER_FLAG = 'Supplier:';
 const INVOICE_PERIOD_FLAG = 'Services provided';
@@ -9,6 +11,7 @@ const INVOICE_PERIOD_SEPARATOR = '-';
 const HEADER_END_FLAG = 'Total';
 const SUMMARY_START_FLAG = 'Summary';
 const INVOICE_ADJUSTMENT_EXCLUDED_LABELS = ['Drop Fees', 'Total'];
+const COMPANY_NAME = 'Deliveroo Belgium sprl';
 
 const getShifts = ({ text, zone, locale }: InvoiceComponentGetterProps) => getDataFromShiftTable(
   text,
@@ -41,5 +44,10 @@ const getAdjustments = ({ text }: InvoiceComponentGetterProps) => getDataFromAdj
 );
 
 export default {
-  getName, getPeriod, getShifts, getAdjustments,
-};
+  getName,
+  getPeriod,
+  getShifts,
+  getAdjustments,
+  currency: EUR,
+  flag: COMPANY_NAME,
+} as InvoiceParser;

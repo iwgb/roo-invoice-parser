@@ -55,6 +55,8 @@ console.log(invoice);
             }
         ],
         "error": "",
+        "currency": "GBP",
+        "locale": "en-GB",
         "hash": "d805386e7dd4b8888a6ed1362a9e05e7976899dd"
     }
 ]
@@ -65,7 +67,7 @@ Timestamps are returned as instances of the Luxon DateTime (the package is a pee
 | Parameter  | Default                   | Description                                                                                                                                                                                                |
 |------------|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `pdfData`  | Required                  | The PDF data, as a raw string or [TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray)                                                                 |
-| `locale`   | Required                  | The market locale of the invoice. The parser only supports certain market locales - see below.                                                                                                             |
+| `locale`   | Attempts to detect        | The market locale of the invoice. The parser only supports certain market locales - see below.                                                                                                             |
 | `timezone` | Capital of locale country | The [identifier](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for the timezone that the work was performed in. The parser will interpret timestamps on the PDF as being in this timezone. |
 
 ### Processing
@@ -123,7 +125,7 @@ rooparse -p /path/to/pdf -t Australia/Darwin -l en-AU
 | Flag            | Default                   | Description                                                                                                                                                                                                |
 |-----------------|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `-p --path`     | Required                  | Path to an invoice PDF, or a directory of invoice PDFs                                                                                                                                                     |
-| `-l --locale`   | Required                  | The market locale of the invoice. The parser only supports certain market locales - see below.                                                                                                             |
+| `-l --locale`   | Attempts to detect        | The market locale of the invoice. The parser only supports certain market locales - see below.                                                                                                             |
 | `-t --timezone` | Capital of locale country | The [identifier](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for the timezone that the work was performed in. The parser will interpret timestamps on the PDF as being in this timezone. |
 | `-o --output`   |                           | If given, writes to the specified file (otherwise, to stdout).                                                                                                                                             |
 | `-w --weeks`    |                           | If given, formats the output in weeks (see *processing* above)                                                                                                                                             |

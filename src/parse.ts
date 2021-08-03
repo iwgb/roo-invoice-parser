@@ -19,13 +19,27 @@ const hashInvoice = (
   }))
   .digest('hex');
 
+const detectLocale = (text: string[]): keyof Markets | undefined => {
+  const [locale] = Object.entries(markets)
+    .find(([_locale, { flag }]) => text
+      .some((line) => line
+        .includes(flag))) || [];
+  return locale as keyof Markets;
+};
+
 const parseInvoice = async (
   data: PdfData,
-  locale: keyof Markets,
+  knownLocale: keyof Markets | undefined = undefined,
   timezone: string | undefined = undefined,
   progress: SingleBar | null = null,
 ): Promise<Invoice> => {
   const text = await getPdfText(data);
+  const locale = knownLocale || detectLocale(text);
+
+  if (locale === undefined) {
+    throw new Error('No known market detected');
+  }
+
   const zone = timezone || defaultTimezones[locale];
 
   let shifts: Shift[] = [];
@@ -70,6 +84,8 @@ const parseInvoice = async (
     shifts,
     adjustments,
     error,
+    currency: parser.currency,
+    locale,
     hash: error === '' ? hashInvoice(name, shifts, adjustments) : '',
   };
 };

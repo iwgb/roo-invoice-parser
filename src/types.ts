@@ -30,6 +30,8 @@ export interface BaseInvoice {
   adjustments: Adjustment[],
   error: string,
   hash: string,
+  currency: string,
+  locale: string,
 }
 
 export interface Invoice extends Period, BaseInvoice {
