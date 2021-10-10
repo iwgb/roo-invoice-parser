@@ -3,8 +3,10 @@ import { SingleBar } from 'cli-progress';
 import { DateTime } from 'luxon';
 import sortBy from 'lodash/sortBy';
 import { getPdfText, PdfData } from './utils/pdf';
-import markets, { InvoiceParser, Markets, defaultTimezones } from './market/markets';
-import { Adjustment, Invoice, Shift } from './types';
+import markets, { Markets, defaultTimezones } from './market/markets';
+import {
+  Adjustment, Invoice, InvoiceParser, Shift,
+} from './types';
 import { getShiftHours } from './utils/datetime';
 
 const hashInvoice = (
@@ -20,20 +22,21 @@ const hashInvoice = (
   .digest('hex');
 
 const detectLocale = (text: string[]): keyof Markets | undefined => {
-  const [locale] = Object.entries(markets)
-    .find(([_locale, { flag }]) => text
-      .some((line) => line
-        .includes(flag))) || [];
-  return locale as keyof Markets;
+  const [locale] = (Object.entries(markets) as [keyof Markets, InvoiceParser][])
+    .find(([_locale, { flags }]) => (
+      flags.with.every((flag) => text
+        .some((line) => line.includes(flag)))
+      && (flags.not || []).every((flag) => text
+        .every((line) => !line.includes(flag))))) || [];
+  return locale;
 };
 
-const parseInvoice = async (
-  data: PdfData,
+export const parseInvoiceText = async (
+  text: string[],
   knownLocale: keyof Markets | undefined = undefined,
   timezone: string | undefined = undefined,
   progress: SingleBar | null = null,
-): Promise<Invoice> => {
-  const text = await getPdfText(data);
+) => {
   const locale = knownLocale || detectLocale(text);
 
   if (locale === undefined) {
@@ -54,7 +57,7 @@ const parseInvoice = async (
   const parser = markets[locale] as InvoiceParser;
 
   try {
-    const args = { text, zone, locale };
+    const args = { text, zone };
     const [
       parsedName, parsedPeriod, parsedShifts, parsedAdjustments,
     ] = await Promise.all([
@@ -90,4 +93,14 @@ const parseInvoice = async (
   };
 };
 
-export default parseInvoice;
+const parseInvoicePdf = async (
+  data: PdfData,
+  knownLocale: keyof Markets | undefined = undefined,
+  timezone: string | undefined = undefined,
+  progress: SingleBar | null = null,
+): Promise<Invoice> => {
+  const text = await getPdfText(data);
+  return parseInvoiceText(text, knownLocale, timezone, progress);
+};
+
+export default parseInvoicePdf;

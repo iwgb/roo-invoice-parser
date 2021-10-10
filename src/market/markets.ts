@@ -1,26 +1,19 @@
 import enGb from './en-GB';
 import enBe from './en-BE';
+import enNl from './en-NL';
 import frFr from './fr-FR';
 import enAu from './en-AU';
 import enIe from './en-IE';
-import {
-  Adjustment, InvoiceComponentGetterProps, Period, Shift,
-} from '../types';
-
-export interface InvoiceParser {
-  getName: (props: InvoiceComponentGetterProps) => string,
-  getPeriod: (props: InvoiceComponentGetterProps) => Period,
-  getShifts: (props: InvoiceComponentGetterProps) => Omit<Shift, 'hours'>[],
-  getAdjustments: (props: InvoiceComponentGetterProps) => Adjustment[],
-  currency: string,
-  flag: string,
-}
+import nlNl from './nl-NL';
+import { InvoiceParser } from '../types';
 
 const UNITED_KINGDOM = 'en-GB';
 const BELGIUM = 'en-BE';
 const FRANCE = 'fr-FR';
 const AUSTRALIA = 'en-AU';
 const IRELAND = 'en-IE';
+const NETHERLANDS_ENGLISH = 'en-NL';
+const NETHERLANDS_DUTCH = 'nl-NL';
 
 export interface Markets {
   [UNITED_KINGDOM]: InvoiceParser,
@@ -28,6 +21,8 @@ export interface Markets {
   [FRANCE]: InvoiceParser,
   [AUSTRALIA]: InvoiceParser,
   [IRELAND]: InvoiceParser,
+  [NETHERLANDS_ENGLISH]: InvoiceParser,
+  [NETHERLANDS_DUTCH]: InvoiceParser,
 }
 
 export const defaultTimezones = {
@@ -36,6 +31,8 @@ export const defaultTimezones = {
   [FRANCE]: 'Europe/Paris',
   [AUSTRALIA]: 'Australia/Sydney',
   [IRELAND]: 'Europe/Dublin',
+  [NETHERLANDS_ENGLISH]: 'Europe/Amsterdam',
+  [NETHERLANDS_DUTCH]: 'Europe/Amsterdam',
 };
 
 export default {
@@ -44,4 +41,6 @@ export default {
   [FRANCE]: frFr,
   [AUSTRALIA]: enAu,
   [IRELAND]: enIe,
-};
+  [NETHERLANDS_ENGLISH]: enNl,
+  [NETHERLANDS_DUTCH]: nlNl,
+} as Markets;

@@ -1,10 +1,11 @@
 import parseInvoice from './parse';
 import processInvoices from './process';
-import marketParsers, { InvoiceParser, Markets } from './market/markets';
+import marketParsers, { Markets } from './market/markets';
 import {
   Adjustment,
   Invoice,
   InvoiceComponentGetterProps,
+  InvoiceParser,
   Month,
   Shift,
   Totals,

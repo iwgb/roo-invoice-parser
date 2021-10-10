@@ -1,6 +1,6 @@
 {
   "name": "@iwgb/roo-invoice-parser",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iwgb/roo-invoice-parser.git"
@@ -16,6 +16,8 @@
     "yargs": "^17.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.15.0",
     "@types/cli-progress": "^3.9.2",
     "@types/lodash": "^4.14.171",
     "@types/luxon": "^1.27.1",
@@ -25,12 +27,12 @@
     "@types/yargs": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^4.28.3",
     "@typescript-eslint/parser": "^4.28.3",
+    "babel-jest": "^27.0.6",
     "eslint": "^7.30.0",
-    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.24.0",
-    "eslint-plugin-react-hooks": "^1.7.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "jest": "^27.0.6",
     "release-it": "^14.10.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.3.5"
@@ -38,9 +40,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "watch": "npm run build -- -w",
-    "prebuild": "rimraf dist && npm run lint",
-    "lint": "eslint . --ext .ts --ignore-path .gitignore",
-    "release": "npm run build && release-it --dry-run"
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "lint": "eslint . --ext .ts,.js --ignore-path .gitignore",
+    "pretest": "npm run build && npm run lint",
+    "test": "jest tests"
   },
   "bugs": {
     "url": "https://github.com/iwgb/roo-invoice-parser/issues"
@@ -63,5 +67,14 @@
   ],
   "bin": {
     "rooparse": "dist/cli.js"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": [
+          "@babel/plugin-transform-modules-commonjs"
+        ]
+      }
+    }
   }
 }

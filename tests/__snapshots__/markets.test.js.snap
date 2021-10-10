@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should correctly parse en-GB: en-GB 1`] = `
+Object {
+  "adjustments": Array [
+    Object {
+      "amount": 0.5,
+      "label": "Adjustments",
+    },
+  ],
+  "currency": "GBP",
+  "end": "2020-01-12T23:59:59.999+00:00",
+  "error": "",
+  "hash": "cb5f4b0283e52e204b0ef9e03328f8bb756c6a7d79f8f9dde872b7b32f38287e",
+  "locale": "en-GB",
+  "name": "Test Rider",
+  "shifts": Array [
+    Object {
+      "end": "2020-01-06T20:43:00.000+00:00",
+      "hours": 0.72,
+      "orders": 1,
+      "pay": 10,
+      "start": "2020-01-06T20:00:00.000+00:00",
+    },
+    Object {
+      "end": "2020-01-08T00:01:00.000+00:00",
+      "hours": 4.02,
+      "orders": 1,
+      "pay": 10,
+      "start": "2020-01-07T20:00:00.000+00:00",
+    },
+  ],
+  "start": "2020-01-06T00:00:00.000+00:00",
+}
+`;

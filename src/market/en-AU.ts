@@ -1,28 +1,14 @@
 import { DateTime } from 'luxon';
-import { InvoiceComponentGetterProps } from '../types';
-import {
-  getDataFromAdjustmentTable, getDataFromShiftTable,
-} from '../utils/parse';
+import genericEnglishParser from './en';
+import { InvoiceComponentGetterProps, InvoiceParser } from '../types';
 import { INVOICE_DATE_FORMAT } from '../constants/invoice';
-import { InvoiceParser } from './markets';
 import { AUD } from '../constants/currency';
+import { getNameFromHeader } from '../utils/parse';
 
-const SUMMARY_START_FLAG = 'Summary';
-const HEADER_END_FLAG = 'Total';
 const INVOICE_PERIOD_FLAG = 'Bill for services supplied during:';
 const INVOICE_PERIOD_DATE_SEPARATOR = '-';
-const INVOICE_ADJUSTMENT_EXCLUDED_LABELS = ['Drop Fees', 'Total'];
 const INVOICE_NAME_FLAG = 'Supplier:';
-const INVOICE_NAME_LABEL_SEPARATOR = ':';
 const COMPANY_NAME = 'Deliveroo Australia Pty Ltd';
-
-const getShifts = ({ text, zone, locale }: InvoiceComponentGetterProps) => getDataFromShiftTable(
-  text,
-  zone,
-  locale,
-  HEADER_END_FLAG,
-  SUMMARY_START_FLAG,
-);
 
 const getPeriod = ({ text, zone }: InvoiceComponentGetterProps) => {
   const [start, end] = text[text.indexOf(INVOICE_PERIOD_FLAG) + 1]
@@ -35,21 +21,16 @@ const getPeriod = ({ text, zone }: InvoiceComponentGetterProps) => {
   };
 };
 
-const getName = ({ text }: InvoiceComponentGetterProps) => text[text.indexOf(INVOICE_NAME_FLAG) + 1]
-  .split(INVOICE_NAME_LABEL_SEPARATOR)[1]
-  .trim();
-
-const getAdjustments = ({ text }: InvoiceComponentGetterProps) => getDataFromAdjustmentTable(
+const getName = ({ text }: InvoiceComponentGetterProps) => getNameFromHeader(
   text,
-  SUMMARY_START_FLAG,
-  INVOICE_ADJUSTMENT_EXCLUDED_LABELS,
+  INVOICE_NAME_FLAG,
+  1,
 );
 
 export default {
+  ...genericEnglishParser,
   getName,
   getPeriod,
-  getShifts,
-  getAdjustments,
   currency: AUD,
-  flag: COMPANY_NAME,
+  flags: { with: [COMPANY_NAME] },
 } as InvoiceParser;

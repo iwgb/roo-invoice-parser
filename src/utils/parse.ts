@@ -4,15 +4,50 @@ import { Adjustment, Shift } from '../types';
 import { getDateTime } from './datetime';
 import { INVOICE_DATE_FORMAT } from '../constants/invoice';
 
+const INVOICE_TIME_REGEX = /^\d\d:\d\d$/;
+const INVOICE_DATE_REGEX = /\d{1,2} \w+ \d{4}/;
+
+const getDataFromShiftLine = (shiftLine: string[], opts: DateTimeOptions) => {
+  const dataStartIndex = shiftLine.findIndex((item) => INVOICE_TIME_REGEX.test(item));
+  const dateMatches = shiftLine
+    .slice(0, dataStartIndex)
+    .join(' ')
+    .match(INVOICE_DATE_REGEX);
+  const date = dateMatches === null
+    ? ''
+    : dateMatches[0];
+
+  const [startTime, endTime, _hours, ordersAndTotal] = shiftLine.slice(dataStartIndex);
+  const [orders, total] = ordersAndTotal.split(':');
+
+  const start = getDateTime(date, startTime, opts);
+  let end = getDateTime(date, endTime, opts);
+
+  if (end < start) {
+    end = end.plus({ days: 1 });
+  }
+
+  return {
+    start,
+    end,
+    orders: Number.parseInt(orders, 10),
+    pay: Number.parseFloat(total.trim().slice(1)),
+  };
+};
+
 export const getDataFromShiftTable = (
   text: string[],
   zone: string,
   locale: string,
   lineBefore: string,
   lineAfter: string,
+  additionalLineStartFlags: string[] = [],
 ): Omit<Shift, 'hours'>[] => {
-  const weekdays = Info.weekdays('long', { locale })
-    .map((weekday) => weekday.toLowerCase());
+  const weekdays = [
+    ...Info.weekdays('long', { locale })
+      .map((weekday) => weekday.toLowerCase()),
+    ...additionalLineStartFlags,
+  ];
 
   const rawShifts = text
     .slice(
@@ -43,25 +78,8 @@ export const getDataFromShiftTable = (
       return shifts;
     }, [] as string[][]);
 
-  return rawShifts.map(([
-    // eslint-disable-next-line no-unused-vars
-    _1, date, startTime, endTime, _2, ordersAndTotal,
-  ]) => {
-    const [orders, total] = ordersAndTotal.split(':');
-    const start = getDateTime(date, startTime, { zone, locale });
-    let end = getDateTime(date, endTime, { zone, locale });
-
-    if (end < start) {
-      end = end.plus({ days: 1 });
-    }
-
-    return {
-      start,
-      end,
-      orders: Number.parseInt(orders, 10),
-      pay: Number.parseFloat(total.trim().slice(1)),
-    };
-  });
+  return rawShifts
+    .map((shiftLine) => getDataFromShiftLine(shiftLine, { zone, locale }));
 };
 
 export const getDataFromAdjustmentTable = (
@@ -101,4 +119,10 @@ export const getPeriodFromHeader = (
     start,
     end: end.endOf('day'),
   };
+};
+
+export const getNameFromHeader = (text: string[], flag: string, offset: number = 0): string => {
+  const index = text.findIndex((line) => line.includes(flag)) + offset;
+  return text[index].split(':')[1]
+    .trim();
 };

@@ -45,7 +45,6 @@ export interface SerializedInvoice extends SerializedPeriod, BaseInvoice {
 export interface InvoiceComponentGetterProps {
   text: string[],
   zone: string,
-  locale: string,
 }
 
 export interface Totals {
@@ -68,4 +67,18 @@ export interface Week extends BaseWeek {
 export interface Month {
   start: DateTime,
   weeks: Week[],
+}
+
+interface InvoiceMarketFlags {
+  with: string[],
+  not?: string[],
+}
+
+export interface InvoiceParser {
+  getName: (props: InvoiceComponentGetterProps) => string,
+  getPeriod: (props: InvoiceComponentGetterProps) => Period,
+  getShifts: (props: InvoiceComponentGetterProps) => Omit<Shift, 'hours'>[],
+  getAdjustments: (props: InvoiceComponentGetterProps) => Adjustment[],
+  currency: string,
+  flags: InvoiceMarketFlags,
 }

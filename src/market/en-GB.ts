@@ -6,5 +6,5 @@ const COMPANY_NAME = 'Roofoods Limited';
 export default {
   ...parser,
   currency: GBP,
-  flag: COMPANY_NAME,
+  flags: { with: [COMPANY_NAME] },
 };

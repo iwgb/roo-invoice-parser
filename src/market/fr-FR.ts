@@ -1,10 +1,9 @@
-import { InvoiceComponentGetterProps } from '../types';
+import { InvoiceComponentGetterProps, InvoiceParser } from '../types';
 import {
   getDataFromAdjustmentTable,
   getDataFromShiftTable,
   getPeriodFromHeader,
 } from '../utils/parse';
-import { InvoiceParser } from './markets';
 import { EUR } from '../constants/currency';
 
 const HEADER_END_FLAG = 'Total';
@@ -17,20 +16,20 @@ const INVOICE_PERIOD_DATE_SEPARATOR = 'au';
 const INVOICE_ADJUSTMENT_EXCLUDED_LABELS = ['Commandes livrées', 'Total TTC'];
 const COMPANY_NAME = 'Deliveroo France SAS';
 
-const getShifts = ({ text, zone, locale }: InvoiceComponentGetterProps) => getDataFromShiftTable(
+const getShifts = ({ text, zone }: InvoiceComponentGetterProps) => getDataFromShiftTable(
   text,
   zone,
-  locale,
+  'fr-FR',
   HEADER_END_FLAG,
   SUMMARY_START_FLAG,
 );
 
-const getPeriod = ({ text, zone, locale }: InvoiceComponentGetterProps) => getPeriodFromHeader(
+const getPeriod = ({ text, zone }: InvoiceComponentGetterProps) => getPeriodFromHeader(
   text,
   INVOICE_PERIOD_FLAG,
   INVOICE_PERIOD_LABEL_SEPARATOR,
   INVOICE_PERIOD_DATE_SEPARATOR,
-  { zone, locale },
+  { zone, locale: 'fr-FR' },
 );
 
 const getName = ({ text }: InvoiceComponentGetterProps) => (text
@@ -51,5 +50,5 @@ export default {
   getShifts,
   getAdjustments,
   currency: EUR,
-  flag: COMPANY_NAME,
+  flags: { with: [COMPANY_NAME] },
 } as InvoiceParser;

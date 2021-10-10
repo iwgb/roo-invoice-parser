@@ -1,19 +1,19 @@
-import parser from './en';
+import genericEnglishParser from './en';
 import { EUR } from '../constants/currency';
 import { InvoiceComponentGetterProps } from '../types';
+import { getNameFromHeader } from '../utils/parse';
 
 const INVOICE_NAME_FLAG = 'Contractor';
-const INVOICE_NAME_LABEL_SEPARATOR = ':';
 const COMPANY_NAME = 'Deliveroo Ireland Limited';
 
-const getName = ({ text }: InvoiceComponentGetterProps) => (text
-  .find((line) => line.includes(INVOICE_NAME_FLAG)) || '')
-  .split(INVOICE_NAME_LABEL_SEPARATOR)[1]
-  .trim();
+const getName = ({ text }: InvoiceComponentGetterProps) => getNameFromHeader(
+  text,
+  INVOICE_NAME_FLAG,
+);
 
 export default {
-  ...parser,
+  ...genericEnglishParser,
   getName,
   currency: EUR,
-  flag: COMPANY_NAME,
+  flags: { with: [COMPANY_NAME] },
 };

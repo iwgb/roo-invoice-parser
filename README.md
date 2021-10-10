@@ -136,6 +136,7 @@ Currently supported markets:
 * Belgium, `en-BE`
 * France, `fr-FR`
 * Ireland, `en-IE`
+* Netherlands, `en-NL` & `nl-NL`
 * United Kingdom, `en-GB`
 
 We're always expanding the markets the parser works in. If you'd like to add support for a new market, raise a PR and we'll get in touch so you can securely provide us with your test data.
