@@ -7,6 +7,8 @@ We're a new and dynamic independent trade union. From our roots representing mig
 
 [iwgb.org.uk](https://iwgb.org.uk) · [Donate](https://iwgb.org.uk/donate)
 
+A project of the IWGB & [ITF](https://itfglobal.org.uk) in co-operation.
+
 ## Install
 In an NPM project
 ```
@@ -15,7 +17,7 @@ npm i @iwgb/roo-invoice-parser
 
 Globally on your device
 ```
-npm i @g @iwgb/roo-invoice-parser
+npm i -g @iwgb/roo-invoice-parser
 ```
 
 ## Usage
@@ -41,17 +43,17 @@ console.log(invoice);
                 "start": "2021-07-13T19:00:00.000+01:00",
                 "end": "2021-07-13T21:09:00.000+01:00",
                 "orders": 5,
-                "pay": 22.43
+                "pay": 2243
             }
         ],
         "adjustments": [
             {
                 "label": "Tips",
-                "amount": 3
+                "amount": 300
             },
             {
                 "label": "Transaction fee",
-                "amount": -0.5
+                "amount": -50
             }
         ],
         "error": "",
@@ -62,7 +64,7 @@ console.log(invoice);
 ]
 ```
 
-Timestamps are returned as instances of the Luxon DateTime (the package is a peer dependency).
+Timestamps are returned as instances of the Luxon DateTime (the package is a peer dependency). All currency amounts are given in lowest currency denomination: for example, for EUR, all are in cents).
 
 | Parameter  | Default                   | Description                                                                                                                                                                                                |
 |------------|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -95,21 +97,21 @@ console.log(data);
             "start": "2020-07-20T15:52:00.000+01:00",
             "end": "2020-07-20T19:02:00.000+01:00",
             "orders": 7,
-            "pay": 33.21,
+            "pay": 3321,
             "hours": 3.17
           }
         ],
         "adjustments": [
           {
             "label": "Tips",
-            "amount": 4
+            "amount": 400
           }
         ],
         "totals": {
           "hours": 3.17,
           "orders": 7,
-          "pay": 33.21,
-          "adjustments": 4
+          "pay": 3321,
+          "adjustments": 400
         }
       }
     ]

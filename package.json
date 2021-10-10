@@ -1,11 +1,11 @@
 {
   "name": "@iwgb/roo-invoice-parser",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iwgb/roo-invoice-parser.git"
   },
-  "license": "see license in LICENSE",
+  "license": "SEE LICENSE IN LICENSE",
   "homepage": "https://github.com/iwgb/roo-invoice-parser#readme",
   "dependencies": {
     "cli-progress": "^3.9.0",
@@ -33,7 +33,6 @@
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-jest": "^24.4.0",
     "jest": "^27.0.6",
-    "release-it": "^14.10.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.3.5"
   },

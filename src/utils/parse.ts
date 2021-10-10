@@ -31,7 +31,7 @@ const getDataFromShiftLine = (shiftLine: string[], opts: DateTimeOptions) => {
     start,
     end,
     orders: Number.parseInt(orders, 10),
-    pay: Number.parseFloat(total.trim().slice(1)),
+    pay: Math.round(Number.parseFloat(total.trim().slice(1)) * 100),
   };
 };
 
@@ -95,7 +95,7 @@ export const getDataFromAdjustmentTable = (
   return adjustments
     .map(([label, amount = '']) => ({
       label,
-      amount: Number.parseFloat(amount.slice(1)),
+      amount: Math.round(Number.parseFloat(amount.slice(1)) * 100),
     }))
     .filter(({ label, amount }) => (
       !excludedLabels.includes(label)
