@@ -1,6 +1,6 @@
 import { arrayOf } from './array';
 
-const pdf: typeof import('pdfjs-dist') = require('pdfjs-dist/legacy/build/pdf');
+const pdf: typeof import('pdfjs-dist') = require('pdfjs-dist/es5/build/pdf');
 
 export type PdfData = Int8Array | Uint8Array | Uint8ClampedArray |
   Int16Array | Uint16Array |
