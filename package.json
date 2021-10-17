@@ -1,6 +1,6 @@
 {
   "name": "@iwgb/roo-invoice-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iwgb/roo-invoice-parser.git"
@@ -11,7 +11,7 @@
     "cli-progress": "^3.9.0",
     "lodash": "^4.17.20",
     "luxon": "^2.0.1",
-    "pdfjs-dist": "^2.5.207",
+    "pdfjs-dist": "~2.5.0",
     "sha.js": "^2.4.11",
     "yargs": "^17.0.1"
   },
