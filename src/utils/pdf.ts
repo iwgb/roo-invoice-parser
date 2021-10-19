@@ -1,6 +1,6 @@
 import { arrayOf } from './array';
 
-const pdf: typeof import('pdfjs-dist') = require('pdfjs-dist/es5/build/pdf');
+const pdf: typeof import('pdfjs-dist') = require('pdfjs-dist/legacy/build/pdf');
 
 export type PdfData = Int8Array | Uint8Array | Uint8ClampedArray |
   Int16Array | Uint16Array |
@@ -17,7 +17,7 @@ export const getPdfText = async (data: PdfData): Promise<string[]> => {
       const textContent = await page.getTextContent();
       return textContent.items
         .slice(0, -1)
-        .map(({ str }) => str);
+        .map((text) => (text as any).str);
     }),
   );
 
