@@ -121,12 +121,11 @@ console.log(data);
 
 ## CLI
 ```
-rooparse -p /path/to/pdf -t Australia/Darwin -l en-AU
+rooparse /path/to/pdf/or/folder/of/pdfs -t Australia/Darwin -l en-AU
 ```
 
 | Flag            | Default                   | Description                                                                                                                                                                                                |
 |-----------------|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `-p --path`     | Required                  | Path to an invoice PDF, or a directory of invoice PDFs                                                                                                                                                     |
 | `-l --locale`   | Attempts to detect        | The market locale of the invoice. The parser only supports certain market locales - see below.                                                                                                             |
 | `-t --timezone` | Capital of locale country | The [identifier](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for the timezone that the work was performed in. The parser will interpret timestamps on the PDF as being in this timezone. |
 | `-o --output`   |                           | If given, writes to the specified file (otherwise, to stdout).                                                                                                                                             |

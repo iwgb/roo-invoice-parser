@@ -8,6 +8,7 @@ import {
   Adjustment, Invoice, InvoiceParser, Shift,
 } from './types';
 import { getShiftHours } from './utils/datetime';
+import { clean } from './utils/array';
 
 const hashInvoice = (
   name: string,
@@ -74,7 +75,8 @@ export const parseInvoiceText = async (
     })), (shift) => shift.start.toMillis());
     adjustments = sortBy(parsedAdjustments, ['label']);
   } catch (e) {
-    error = e.stack || `${e.name}: ${e.message}`;
+    const { stack, name: errorName, message } = e as Error;
+    error = stack || `${errorName}: ${message}`;
   }
 
   if (progress) {
@@ -100,7 +102,7 @@ const parseInvoicePdf = async (
   progress: SingleBar | null = null,
 ): Promise<Invoice> => {
   const text = await getPdfText(data);
-  return parseInvoiceText(text, knownLocale, timezone, progress);
+  return parseInvoiceText(clean(text), knownLocale, timezone, progress);
 };
 
 export default parseInvoicePdf;

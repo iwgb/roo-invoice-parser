@@ -122,7 +122,10 @@ export const getPeriodFromHeader = (
 };
 
 export const getNameFromHeader = (text: string[], flag: string, offset: number = 0): string => {
-  const index = text.findIndex((line) => line.includes(flag)) + offset;
-  return text[index].split(':')[1]
+  const flagIndex = text.findIndex((line) => line.includes(flag));
+  const nameIndexOffset = text
+    .slice(flagIndex + offset)
+    .findIndex((line) => line.trim() !== '');
+  return text[flagIndex + offset + nameIndexOffset].split(':')[1]
     .trim();
 };
